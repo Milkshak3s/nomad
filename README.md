@@ -1,2 +1,2 @@
 # Nomad
-Automated security hardening for Windows and Ubuntu
+Portable, automated security hardening for Windows and Ubuntu

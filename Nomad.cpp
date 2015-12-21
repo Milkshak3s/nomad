@@ -41,12 +41,21 @@ int displayBanner()
 	return 0;
 }
 
+int modifyLSP(LPCWSTR section, LPCWSTR key, LPWSTR buffer)
+{
+	//cleaner way to update .ini files as seen in fixLSP()
+	LPCWSTR iniFile = L"C:\\sec.cfg";
+	WritePrivateProfileString(section, key, buffer, iniFile);
+	return 0;
+}
+
 int fixLSP()
 {
 	//generate current configuration via SECEDIT
 	system("SECEDIT /EXPORT /CFG C:\\sec.cfg");
 
 	//update newsec keys via Windows .ini modifiers
+	//TODO: cleanup code with modifyLSP()
 	LPCWSTR iniSection = L"Privilege Rights";
 	LPCWSTR iniKey;
 	LPWSTR iniBuffer;
@@ -324,6 +333,123 @@ int fixLSP()
 	return 0;
 }
 
+int fixFirewall()
+{
+	//enable firewall profiles via netsh
+	system("netsh advfirewall reset");
+	system("netsh advfirewall set allprofiles blockinbound, allowoutbound");
+	system("netsh advfirewall set allprofiles state on");
+
+	//enable windows firewall service
+	system("SC CONFIG mpssvc START= auto");
+	system("NET START mpssvc");
+	cout << "Enabled windows firewall service\n";
+
+	cout << "Firewall enabled and updated\n";
+
+	system("pause");
+
+	return 0;
+}
+
+int fixServices()
+{
+	//enable and start important services via SC CONFIG and NET START
+
+	//windows update service
+	system("SC CONFIG wuaserv START= auto");
+	system("NET START wuaserv");
+	cout << "Enabled windows update service\n";
+
+	//event log service
+	system("SC CONFIG eventlog START= auto");
+	system("NET START eventlog");
+	cout << "Enabled event log service\n";
+
+	//windows firewall
+	system("SC CONFIG mpssvc START= auto");
+	system("NET START mpssvc");
+	cout << "Enabled windows firewall service\n";
+
+	//base filtering engine
+	system("SC CONFIG bfe START= auto");
+	system("NET START bfe");
+	cout << "Enabled base filtering engine\n";
+
+	//security center
+	system("SC CONFIG wscsvc START= auto");
+	system("NET START wscsvc");
+	cout << "Enabled security center\n";
+
+	//system event notification service
+	system("SC CONFIG sens	START= auto");
+	system("NET START sens");
+	cout << "Enabled system event notification service\n";
+
+	//disable and stop known insecure services via SC CONFIG and NET START
+
+	//telnet server
+	system("SC CONFIG tlntsvr START= disabled");
+	system("NET STOP tlntsvr");
+	cout << "Disabled telnet server\n";
+
+	//microsoft ftp server
+	system("SC CONFIG ftpsvc START= disabled");
+	system("NET STOP ftpsvc");
+	cout << "Disabled ftp server\n";
+
+	//snmp services
+	system("SC CONFIG snmp START= disabled");
+	system("NET STOP snmp");
+	system("SC CONFIG snmp START= disabled");
+	system("NET STOP snmp");
+	cout << "Disabled snmp services\n";
+
+	//windows remote management service
+	system("SC CONFIG winrm START= disabled");
+	system("NET STOP winrm");
+	cout << "Disabled remote management service\n";
+
+	//remote desktop service
+	system("SC CONFIG termservice START= disabled");
+	system("NET STOP termservice");
+	cout << "Disabled remote desktop services\n";
+
+	//microsoft web server
+	system("SC CONFIG w3svc START= disabled");
+	system("NET STOP w3svc");
+	cout << "Disabled w3svc web server\n";
+
+	//internet connection sharing
+	system("SC CONFIG sharedaccess START= disabled");
+	system("NET STOP sharedaccess");
+	cout << "Disabled internet connection sharing\n";
+
+	//routing and remote access service
+	system("SC CONFIG remoteaccess START= disabled");
+	system("NET STOP remoteaccess");
+	cout << "Disabled routing and remote access service\n";
+
+	system("pause");
+
+	return 0;
+}
+
+int updateSoftware()
+{
+	//TODO: detect and fix out of date software and dependencies on the machine
+
+	return 0;
+}
+
+int updateSystem()
+{
+	//TODO: force system updates for the machine
+	//TODO: Detect missing service packs, download and execute from MS website
+
+	return 0;
+}
+
 int testFunc()
 {
 	return 0;
@@ -335,21 +461,33 @@ int menu()
 
 	int menSelect;
 	cout << "1. Fix LSP\n";
-	cout << "2. Test Function\n";
-	cout << "3. Menu\n";
-	cout << "4. Exit\n\n";
+	cout << "2. Fix Firewall\n";
+	cout << "3. Fix Services\n";
+	cout << "97. Test Function\n";
+	cout << "98. Menu\n";
+	cout << "99. Exit\n\n";
 	cout << "viking# ";
 	cin >> menSelect;
 
+	//TODO: change to case statement
 	if (menSelect == 1) {
 		fixLSP();
 		menu();
 	}
 	else if (menSelect == 2) {
-		testFunc();
+		fixServices();
 		menu();
 	}
 	else if (menSelect == 3) {
+		fixFirewall();
+		menu();
+	}
+	else if (menSelect == 97) {
+		testFunc();
+		menu();
+	}
+	else if (menSelect == 98) {
+		system("cls");
 		menu();
 	}
 

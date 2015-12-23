@@ -482,7 +482,7 @@ int updateSoftware()
 	return 0;
 }
 
-int startupApplications()
+int displayStartup()
 {
 	system("wmic startup get command");// start up application Names
 	system("pause");
@@ -553,7 +553,8 @@ int menu()
 	cout << "2. Fix Firewall\n";
 	cout << "3. Fix Services\n";
 	cout << "4. Parse Userlist\n";
-	cout << "5. File Search\n";
+	cout << "5. Media File Search\n";
+	cout << "6. Display Startup Programs\n";
 	cout << "8. Display Listening Ports";
 	cout << "97. Test Function\n";
 	cout << "98. Menu\n";
@@ -580,6 +581,10 @@ int menu()
 	}
 	else if (menSelect == 5) {
 		fileSearch();
+		menu();
+	}
+	else if (menSelect == 6) {
+		displayStartup();
 		menu();
 	}
 	else if (menSelect == 8) {

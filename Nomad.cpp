@@ -468,7 +468,7 @@ int fixServices()
 	system("SC CONFIG remoteaccess START= disabled");
 	system("NET STOP remoteaccess");
 	cout << "Disabled routing and remote access service\n";
-	cout << "Active Services"// All Active Sercies
+	cout << "Active Services";// All Active Sercies
 	system("wmic service get caption"); 
 	system("pause");
 
@@ -481,41 +481,46 @@ int updateSoftware()
 
 	return 0;
 }
+
 int startupApplications()
 {
 	system("wmic startup get command");// start up application Names
 	system("pause");
 }
+
 int fileSearch()
 {
 	int x;
 	cout << "Type 1 To Search Users, Type 2 to Search the Entire C: Drive";
 	cin >> x;
-		if (x == 1)
-		{
-			//TODO: Find Media Files Within Users
-			system("dir /S C:\Users\*.png");
-			system("dir /S C:\Users\*.JPEG");
-			system("dir /S C:\Users\*.GIF");
-			system("dir /S C:\Users\*.jpg");
-			system("dir /S C:\Users\*.mp3");
-			system("dir /S C:\Users\*.mov");//movies
-			system("dir /S C:\Users\*.mp4");
-			system("pause");
-		}
+	if (x == 1)
+	{
+		//Find Media Files Within Users
+		system("dir /S C:\\Users\\*.png");
+		system("dir /S C:\\Users\\*.JPEG");
+		system("dir /S C:\\Users\\*.GIF");
+		system("dir /S C:\\Users\\*.jpg");
+		system("dir /S C:\\Users\\*.mp3");
+		system("dir /S C:\\Users\\*.mov");//movies
+		system("dir /S C:\\Users\\*.mp4");
+	}
 	if (x == 2)
 	{
-		//To Do: Media Files within the whole C Drive
-		system("dir /S C:\*.png");
-		system("dir /S C:\*.JPEG");
-		system("dir /S C:\*.GIF");
-		system("dir /S C:\*.jpg");
-		system("dir /S C:\*.mp3");
-		system("dir /S C:\*.mov");//movies
-		system("dir /S C:\*.mp4");
-		system("pause");
+		//Media Files within the whole C Drive
+		system("dir /S C:\\*.png");
+		system("dir /S C:\\*.JPEG");
+		system("dir /S C:\\*.GIF");
+		system("dir /S C:\\*.jpg");
+		system("dir /S C:\\*.mp3");
+		system("dir /S C:\\*.mov");//movies
+		system("dir /S C:\\*.mp4");
 	}
+
+	system("pause");
+
+	return 0;
 }
+
 int updateSystem()
 {
 	//TODO: force system updates for the machine
@@ -548,6 +553,7 @@ int menu()
 	cout << "2. Fix Firewall\n";
 	cout << "3. Fix Services\n";
 	cout << "4. Parse Userlist\n";
+	cout << "5. File Search\n";
 	cout << "8. Display Listening Ports";
 	cout << "97. Test Function\n";
 	cout << "98. Menu\n";
@@ -570,6 +576,10 @@ int menu()
 	}
 	else if (menSelect == 4) {
 		parseUsers("C:\\users.txt");
+		menu();
+	}
+	else if (menSelect == 5) {
+		fileSearch();
 		menu();
 	}
 	else if (menSelect == 8) {

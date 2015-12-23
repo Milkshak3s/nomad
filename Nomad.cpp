@@ -47,7 +47,7 @@ int parseUsers(string fileName)
 	//parse list of users in format "Administrators\n Me\n Users\n You\n"
 	ifstream infile(fileName);
 	string line;
-	boolean isAdmin;
+	bool isAdmin;
 
 	while (getline(infile, line))
 	{
@@ -489,6 +489,16 @@ int updateSystem()
 	return 0;
 }
 
+int displayListening()
+{
+	//display listening ports via netstat
+	system("C:\\Windows\\system32\\netstat.exe -aon");
+
+	system("pause");
+	
+	return 0;
+}
+
 int testFunc()
 {
 	return 0;
@@ -503,6 +513,7 @@ int menu()
 	cout << "2. Fix Firewall\n";
 	cout << "3. Fix Services\n";
 	cout << "4. Parse Userlist\n";
+	cout << "8. Display Listening Ports";
 	cout << "97. Test Function\n";
 	cout << "98. Menu\n";
 	cout << "99. Exit\n\n";
@@ -524,6 +535,10 @@ int menu()
 	}
 	else if (menSelect == 4) {
 		parseUsers("C:\\users.txt");
+		menu();
+	}
+	else if (menSelect == 8) {
+		displayListening();
 		menu();
 	}
 	else if (menSelect == 97) {

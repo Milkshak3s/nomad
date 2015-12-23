@@ -41,6 +41,45 @@ int displayBanner()
 	return 0;
 }
 
+//file stream, number of users
+int parseUsers(string fileName)
+{
+	//parse list of users in format "Administrators\n Me\n Users\n You\n"
+	ifstream infile(fileName);
+	string line;
+	boolean isAdmin;
+
+	while (getline(infile, line))
+	{
+		istringstream iss(line);
+		if (line == "Administrators")
+		{
+			isAdmin = true;
+		}
+		else if (line == "Users")
+		{
+			isAdmin = false;
+		}
+		else
+		{
+			if (isAdmin == true)
+			{
+				//dostuff for admins
+				cout << "Admin: " << line << "\n";
+			}
+			else if (isAdmin == false)
+			{
+				//dostuff for users
+				cout << "User: " << line << "\n";
+			}
+		}
+	}
+
+	system("pause");
+	return 0;
+}
+
+//section name, key name, storage buffer
 int modifyLSP(LPCWSTR section, LPCWSTR key, LPWSTR buffer)
 {
 	//cleaner way to update .ini files as seen in fixLSP()
@@ -498,6 +537,7 @@ int menu()
 	cout << "1. Fix LSP\n";
 	cout << "2. Fix Firewall\n";
 	cout << "3. Fix Services\n";
+	cout << "4. Parse Userlist\n";
 	cout << "97. Test Function\n";
 	cout << "98. Menu\n";
 	cout << "99. Exit\n\n";
@@ -515,6 +555,10 @@ int menu()
 	}
 	else if (menSelect == 3) {
 		fixFirewall();
+		menu();
+	}
+	else if (menSelect == 4) {
+		parseUsers("C:\\users.txt");
 		menu();
 	}
 	else if (menSelect == 97) {

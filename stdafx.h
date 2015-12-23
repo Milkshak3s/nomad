@@ -11,5 +11,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <istream>
 #include <limits>
 #include <Windows.h>

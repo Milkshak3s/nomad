@@ -79,6 +79,36 @@ int parseUsers(string fileName)
 	return 0;
 }
 
+int updatePasswords(string filename, string pass)
+{
+	//updates passwords of users listed in filename to CyberProtect9!
+	ifstream infile(filename);
+	string user;
+	string toPass;
+	bool isAdmin;
+
+	while (getline(infile, user))
+	{
+		istringstream iss(user);
+		if (user == "Administrators")
+		{
+			isAdmin = true;
+		}
+		else if (user == "Users")
+		{
+			isAdmin = false;
+		}
+		else
+		{
+			toPass = "net user " + user + pass;
+			system(toPass.c_str());
+		}
+	}
+
+	system("pause");
+	return 0;
+}
+
 //section name, key name, storage buffer
 int modifyLSP(LPCWSTR section, LPCWSTR key, LPWSTR buffer)
 {
@@ -486,6 +516,8 @@ int displayStartup()
 {
 	system("wmic startup get command");// start up application Names
 	system("pause");
+
+	return 0;
 }
 
 int fileSearch()
@@ -555,7 +587,8 @@ int menu()
 	cout << "4. Parse Userlist\n";
 	cout << "5. Media File Search\n";
 	cout << "6. Display Startup Programs\n";
-	cout << "8. Display Listening Ports";
+	cout << "7. Update User Passwords\n";
+	cout << "8. Display Listening Ports\n";
 	cout << "97. Test Function\n";
 	cout << "98. Menu\n";
 	cout << "99. Exit\n\n";
@@ -585,6 +618,10 @@ int menu()
 	}
 	else if (menSelect == 6) {
 		displayStartup();
+		menu();
+	}
+	else if (menSelect == 7) {
+		updatePasswords("C:\\users.txt", "CyberProtect9!");
 		menu();
 	}
 	else if (menSelect == 8) {

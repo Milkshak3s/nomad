@@ -109,6 +109,55 @@ int updatePasswords(string filename, string pass)
 	return 0;
 }
 
+int regroupUsers(string fileName)
+{
+	//remove unlisted users
+	ifstream infile(fileName);
+	string line;
+	string lAdmin = "net localgroup Administrators ";
+	string lRDP = "net localgroup \"Remote Desktop Users\" ";
+	string lRMan = "net localgroup \"Remote Management Users\" ";
+	string lPower = "net localgroup \"Power Users\" ";
+	string lCrypto = "net localgroup \"Cryptographic Operators\" ";
+	string lNetConf= "net localgroup \"Network Configuration Operators\" ";
+	string lUser = "net localgroup Administrators ";
+	bool isAdmin;
+
+	while (getline(infile, line))
+	{
+		istringstream iss(line);
+		if (line == "Administrators")
+		{
+			isAdmin = true;
+		}
+		else if (line == "Users")
+		{
+			isAdmin = false;
+		}
+		else
+		{
+			if (isAdmin == true)
+			{
+				system(lAdmin.c_str + line + " /ADD");
+				
+			}
+			else if (isAdmin == false)
+			{
+				system(lUser.c_str + line + " /ADD");
+				system(lRDP.c_str + line + " /DELETE");
+				system(lAdmin.c_str + line + " /DELETE");
+				system(lPower.c_str + line + " /DELETE");
+				system(lCrypto.c_str + line + " /DELETE");
+				system(lRMan.c_str + line + " /DELETE");
+				system(lNetConf.c_str + line + " /DELETE");
+			}
+		}
+	}
+
+	system("pause");
+	return 0;
+}
+
 //section name, key name, storage buffer
 int modifyLSP(LPCWSTR section, LPCWSTR key, LPWSTR buffer)
 {
@@ -589,6 +638,7 @@ int menu()
 	cout << "6. Display Startup Programs\n";
 	cout << "7. Update User Passwords\n";
 	cout << "8. Display Listening Ports\n";
+	cout << "9. Fix User Groups\n";
 	cout << "97. Test Function\n";
 	cout << "98. Menu\n";
 	cout << "99. Exit\n\n";
@@ -626,6 +676,10 @@ int menu()
 	}
 	else if (menSelect == 8) {
 		displayListening();
+		menu();
+	}
+	else if (menSelect == 9) {
+		regroupUsers();
 		menu();
 	}
 	else if (menSelect == 97) {

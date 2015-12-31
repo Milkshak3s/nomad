@@ -114,13 +114,14 @@ int regroupUsers(string fileName)
 	//remove unlisted users
 	ifstream infile(fileName);
 	string line;
-	string lAdmin = "net localgroup Administrators ";
-	string lRDP = "net localgroup \"Remote Desktop Users\" ";
-	string lRMan = "net localgroup \"Remote Management Users\" ";
-	string lPower = "net localgroup \"Power Users\" ";
-	string lCrypto = "net localgroup \"Cryptographic Operators\" ";
-	string lNetConf= "net localgroup \"Network Configuration Operators\" ";
-	string lUser = "net localgroup Administrators ";
+	string lAdminY;
+	string lAdminN;
+	string lRDP;
+	string lRMan;
+	string lPower;
+	string lCrypto;
+	string lNetConf;
+	string lUser;
 	bool isAdmin;
 
 	while (getline(infile, line))
@@ -138,18 +139,26 @@ int regroupUsers(string fileName)
 		{
 			if (isAdmin == true)
 			{
-				system(lAdmin.c_str + line + " /ADD");
-				
+				lAdminY = "net localgroup Administrators " + line + " /ADD";
+				system(lAdminY.c_str());
+
 			}
 			else if (isAdmin == false)
 			{
-				system(lUser.c_str + line + " /ADD");
-				system(lRDP.c_str + line + " /DELETE");
-				system(lAdmin.c_str + line + " /DELETE");
-				system(lPower.c_str + line + " /DELETE");
-				system(lCrypto.c_str + line + " /DELETE");
-				system(lRMan.c_str + line + " /DELETE");
-				system(lNetConf.c_str + line + " /DELETE");
+				string lUser = "net localgroup Users " + line + " /ADD";
+				system(lUser.c_str());
+				string lRDP = "net localgroup \"Remote Desktop Users\" " + line + " /DELETE";
+				system(lRDP.c_str());
+				string lAdminN = "net localgroup Administrators " + line + " /DELETE";
+				system(lAdminN.c_str());
+				string lPower = "net localgroup \"Power Users\" " + line + " /DELETE";
+				system(lPower.c_str());
+				string lCrypto = "net localgroup \"Cryptographic Operators\" " + line + " /DELETE";
+				system(lCrypto.c_str());
+				string lRMan = "net localgroup \"Remote Management Users\" " + line + " /DELETE";
+				system(lRMan.c_str());
+				string lNetConf = "net localgroup \"Network Configuration Operators\" " + line + " /DELETE";
+				system(lNetConf.c_str());
 			}
 		}
 	}
@@ -679,7 +688,7 @@ int menu()
 		menu();
 	}
 	else if (menSelect == 9) {
-		regroupUsers();
+		regroupUsers("C:\\users.txt");
 		menu();
 	}
 	else if (menSelect == 97) {

@@ -81,7 +81,7 @@ int parseUsers(string fileName)
 
 int updatePasswords(string filename, string pass)
 {
-	//updates passwords of users listed in filename to CyberProtect9!
+	//updates passwords of users listed in filename to secure_password9!
 	ifstream infile(filename);
 	string user;
 	string toPass;
@@ -100,7 +100,7 @@ int updatePasswords(string filename, string pass)
 		}
 		else
 		{
-			toPass = "net user " + user + pass;
+			toPass = "net user " + user + " " + pass;
 			system(toPass.c_str());
 		}
 	}
@@ -159,6 +159,20 @@ int regroupUsers(string fileName)
 				system(lRMan.c_str());
 				string lNetConf = "net localgroup \"Network Configuration Operators\" " + line + " /DELETE";
 				system(lNetConf.c_str());
+				string gUser = "net group Users " + line + " /ADD";
+				system(gUser.c_str());
+				string gRDP = "net group \"Remote Desktop Users\" " + line + " /DELETE";
+				system(gRDP.c_str());
+				string gAdminN = "net group Administrators " + line + " /DELETE";
+				system(gAdminN.c_str());
+				string gPower = "net group \"Power Users\" " + line + " /DELETE";
+				system(gPower.c_str());
+				string gCrypto = "net group \"Cryptographic Operators\" " + line + " /DELETE";
+				system(gCrypto.c_str());
+				string gRMan = "net group \"Remote Management Users\" " + line + " /DELETE";
+				system(gRMan.c_str());
+				string gNetConf = "net group \"Network Configuration Operators\" " + line + " /DELETE";
+				system(gNetConf.c_str());
 			}
 		}
 	}
@@ -680,7 +694,7 @@ int menu()
 		menu();
 	}
 	else if (menSelect == 7) {
-		updatePasswords("C:\\users.txt", "CyberProtect9!");
+		updatePasswords("C:\\users.txt", "secure_password9!");
 		menu();
 	}
 	else if (menSelect == 8) {

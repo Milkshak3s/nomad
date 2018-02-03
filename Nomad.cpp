@@ -24,6 +24,7 @@ int displayBanner()
 	cout << "   (( ) |           |:::::::    toolkit for mobile  ::::::::|      \\ `. \n";
 	cout << "    `/ /            |:::::::       blue teams.      ::::::::|       L  \\ \n";
 	cout << "    / /             |:::::::                        ::::::::|       |   \\ \n";
+	cout << "   / /              |:::::::      --Numba Won--     ::::::::|       |   \\ \n";
 	cout << "   J J              |:::::::      --2600 Club--     ::::::::|       |    L\n";
 	cout << "   | |              |:::::::      --   5KB   --     ::::::::|       |    |\n";
 	cout << "   | |              |:::::::        ::::::::        ::::::::|       F    |\n";
@@ -37,7 +38,7 @@ int displayBanner()
 	cout << "      \\   / |   \\     //\\     //\\     //\\     //\\     //\\     /    .'\n";
 	cout << "       \\ / /     `---//  `---//  `---//  `---//  `---//  `---'   .'\n";
 	cout << "________/_/_________//______//______//______//______//_________.'_________\n";
-	cout << "##VHS##MT#################################################################\n\n\n";
+	cout << "##RIT##VHS##MTHS##########################################################\n\n\n";
 	return 0;
 }
 
@@ -104,6 +105,62 @@ int updatePasswords(string filename, string pass)
 			system(toPass.c_str());
 		}
 	}
+
+	system("pause");
+	return 0;
+}
+
+int updatePasswordsISTS(string filename, string pass)
+{
+	//updates passwords of users listed in filename to the ISTS pass
+	ifstream infile(filename);
+	string user;
+	string toPass;
+	bool isAdmin;
+
+	while (getline(infile, user))
+	{
+		istringstream iss(user);
+		if (user == "Administrators")
+		{
+			isAdmin = true;
+		}
+		else if (user == "Users")
+		{
+			isAdmin = false;
+		}
+		else
+		{
+			toPass = "net user " + user + " " + pass;
+			system(toPass.c_str());
+		}
+	}
+
+	system("pause");
+	return 0;
+}
+
+int generateDataISTS() {
+	string command;
+
+	command = "netstat -ano | findstr LIST | sort > stat.txt";
+	system(command.c_str());
+	command = "dir /B /S \windows\system32 > 32.txt";
+	system(command.c_str());
+	command = "dir /B /S \*.exe > exes.txt";
+	system(command.c_str());
+	command = "net share > shares.txt";
+	system(command.c_str());
+	command = "net user > users.txt";
+	system(command.c_str());
+	command = "net group 'Domain Admins' > dadmins.txt";
+	system(command.c_str());
+	command = "net start > svcs.txt";
+	system(command.c_str());
+	command = "net user guest /active:no";
+	system(command.c_str());
+	command = "icacls C:\Windows\Temp /inheritance:r /deny 'Everyone:(OI)(CI)(F)";
+	system(command.c_str());
 
 	system("pause");
 	return 0;
@@ -653,6 +710,8 @@ int menu()
 	displayBanner();
 
 	int menSelect;
+	cout << "21. ISTS Updates Passwords\n";
+	cout << "22. ISTS Generate Data\n";
 	cout << "1. Fix LSP\n";
 	cout << "2. Fix Firewall\n";
 	cout << "3. Fix Services\n";
@@ -671,6 +730,14 @@ int menu()
 	//TODO: change to case statement
 	if (menSelect == 1) {
 		fixLSP();
+		menu();
+	}
+	else if (menSelect == 21) {
+		updatePasswordsISTS("C:\\users.txt", "WeWinISTS2018!!");
+		menu();
+	}
+	else if (menSelect == 22) {
+		generateDataISTS();
 		menu();
 	}
 	else if (menSelect == 2) {
